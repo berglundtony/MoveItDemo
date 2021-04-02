@@ -1,0 +1,10 @@
+﻿@section SPAViews {
+        @Html.Partial("_Home")
+    }
+    @section Scripts{
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/knockout")
+        @Scripts.Render("~/bundles/app")
+        <script src="https://maps.googleapis.com/maps/api/js?libraries=CalculateDistance&key=AIzaSyCLB9sMk0s-Jz9TE84ii1lQg2U3FS5PFKQ"></script>
+        <script type="text/javascript" src="~/Scripts/MapScript.js"></script>
+    }

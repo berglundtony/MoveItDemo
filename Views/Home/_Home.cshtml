@@ -1,0 +1,245 @@
+﻿@using Microsoft.AspNet.Identity;
+@using MoveItDemo.Models.ViewModels;
+@if (Request.IsAuthenticated)
+{
+    <input type="hidden" id="Message" value="@Session["Message"]" />;
+    <input type="hidden" id="Username" value="@Html.Raw(User.Identity.GetUserName())" />
+    <div id="fromToDestination">
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <br />
+                <h2>Ange startpunkt och destination</h2>
+                <br />
+            </div>
+            <input type="hidden" name="travelMode" value="DRIVING" />
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-4 col-lg-3">
+                <div class="form-group">
+                    <div class="input-group-prepend"><b>Från:</b></div>
+                    <input id="travelfrom" class="form-control" type="text" name="name" enabled="true" value="" />
+                </div>
+            </div>
+            <div class="col-md-offset-2 col-lg-offset-2">
+                <div class="form-group">
+                    <input class="btn btn-xs" type="button" id="showMe" title="Om du vill ange startpunkt där du är" value="Använd nuvarande plats" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-4 col-lg-3">
+                <div class="form-group">
+                    <div class="input-group-prepend"><b>Till: </b></div>
+                    <input id="travelto" class="form-control" type="text" name="name" enabled="true" value="" />
+                </div>
+                <div class="form-group">
+                    <input type="button" id="GetRoute" onclick="GetRoute();" value="Hämta rutt" />
+                </div>
+                <div class="form-group">
+                    <input type="button" id="GetFormForPriceSuggestion" value="Ange uppgifter för prisförslag" />
+                </div>
+            </div>
+        </div>
+        <div id="result"></div>
+        <div id="info">
+            <span id="hdDistance"></span>
+            <span id="dvDistance"></span>
+            <span id="ftDistance"></span><br />
+            <span id="hdOrigin"></span>
+            <span id="dvOrigin"></span><br />
+            <span id="hdDestination"></span>
+            <span id="dvDestination"></span>
+        </div>
+
+        <div class="row">
+            <br />
+            <div id="map" style="min-height:250px"></div>
+        </div>
+        <div id="googleMap"></div>
+    </div>
+
+    <div id="PriceSuggestion"></div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <form id="check-price-form">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <br />
+                        <h2>Ange upgifter för prisförslag</h2>
+                        <br />
+                    </div>
+                    <input type="hidden" name="travelMode" value="DRIVING" />
+                </div>
+                <div class="form-group">
+                    <label class="form-check-label" for="firstcheck">Förnamn</label>
+                    <input type="text" class="form-control" id="firstname" name="first_name" />
+                </div>
+                <div class="form-group">
+                    <label class="form-check-label" for="lastcheck">Efternamn</label>
+                    <input type="text" class="form-control" id="lastname" name="last_name" />
+                </div>
+                <div class="form-group">
+                    <label class="form-check-label" for="usercheck">Användarnamn</label>
+                    <input type="text" class="form-control" id="username" name="user_name" />
+                </div>
+                <div class="form-group">
+                    <label class="form-check-label" for="fromcheck">Från</label>
+                    <input type="text" class="form-control" id="fromname" name="from_name" />
+                </div>
+                <div class="form-group">
+                    <label class="form-check-label" for="tocheck">Till</label>
+                    <input type="text" class="form-control" id="toname" name="to_name" />
+                </div>
+                <div class="form-group">
+                    <label class="form-check-label" for="distancecheck">Avstånd</label>
+                    <input type="text" class="form-control" id="distance" name="distance" />
+                </div>
+                <div class="form-group">
+                    <label class="form-check-label" for="residencecheck">Bostadsyta i kvm</label>
+                    <input type="text" class="form-control" id="residencearea" name="residence_area" />
+                </div>
+                <div class="form-group">
+                    <label class="form-check-label" for="fromcheck">Vind/källare i kvm</label>
+                    <input type="text" class="form-control" id="windbasementarea" name="wind_basement_area" />
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="pianostatus" id="pianocheck" />
+                    <label class="form-check-label" for="pianocheck">Pianostatus</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="packingstatus" id="packingcheck" />
+                    <label class="form-check-label" for="packingcheck">Packhjälp</label>
+                </div>
+                <br />
+                <div class="form-group-btn">
+                    <input type="button" id="view-price-suggestions-btn" value="Se prisförslag" />
+                    <input type="button" id="close-btn" value="Stäng" />
+                </div>
+            </form>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $("#view-price-suggestions-btn").show();
+        $("#check-price-form").hide();
+    });
+
+    $("#GetFormForPriceSuggestion").on("click", function () {
+        var travelfrom = $("#dvOrigin").text();
+        var travelto = $("#dvDestination").text();
+        var distance = $("#dvDistance").text();
+        var username = $("#Username").val();
+        $("#fromToDestination").hide();
+        $("#check-price-form").show();
+        $("#username").val(username);
+        $("#fromname").val(travelfrom);
+        $("#toname").val(travelto);
+        $("#distance").val(distance);
+    });
+
+    $("#close-btn").on("click", function () {
+        $("#check-price-form").hide();
+        $("#fromToDestination").show();
+    });
+
+    $("#view-price-suggestions-btn").on("click", function () {
+        var firstname = $("#firstname").val();
+        var lastname = $("#lastname").val();
+        var travelfrom = $("#dvOrigin").text();
+        var travelto = $("#dvDestination").text();
+        var distance = $("#dvDistance").text();
+        var username = $("#Username").val();
+        var residencearea = $("#residencearea").val();
+        var windbasementarea = $("#windbasementarea").val();
+        var pianostatus = $('input[name=pianostatus]').prop('checked');
+        var packingstatus = $('input[name=packingstatus]').prop('checked');
+
+        var datastring = { 'FirstName': firstname, 'LastName': lastname, 'UserName': username, 'FromName': travelfrom, 'ToName': travelto, 'Distance': distance, 'ResidenceArea': residencearea, 'WindBaseMentArea': windbasementarea, 'PianoStatus': pianostatus, 'PackingStatus': packingstatus }
+
+        $.ajax({
+            url: 'Home/GetOffert',
+            type: 'GET',
+            dataType: 'json',
+            data: datastring,
+            success: function (data, textStatus, xhr) {
+                var el = data;
+                $('#check-price-form').hide();
+                $("#PriceSuggestion").html("<div class='<div class='container'>" +
+                    "</br><h1>Prisförslag på bohagsflytt</h1><div class='row'><div class='col-xs-12 col-sm-12 col-md-6 col-lg-6'></b><p></p><p></p><p></p><p><form><b>Offertnummer: </b><span id='latestid'>"
+                    + el.Id + "</span></p><p><b>Namn: </b>"
+                    + el.FirstName + " "
+                    + el.LastName + "</p><p><b>Användarnamn: </b>"
+                    + el.UserName + "</p><p><b>Från: </b>"
+                    + el.FromName + "</p><p><b>Till: </b>"
+                    + el.ToName + "</p><p><b>Sträcka: </b>"
+                    + el.Distance + "</p><p><b>Bostadsyta: </b>"
+                    + el.ResidenceArea + " kvm</p><p><b>Vind/Källare: </b>"
+                    + el.WindBaseMentArea + " kvm</p><p></p><b>Övrigt </b><p><b>Pianoflytt: </b> <span id='pianostat'>"
+                    + el.PianoStatus + "</span></p><p><b>Packhjälp: </b> <span id='packingstat'>"
+                    + el.PackingStatus + "</span></p></div><div class='col-xs-12 col-sm-12 col-md-6 col-lg-6'><h3>Upskattat pris: "
+                    + el.Price + " kr inklusive moms.</h3></p><p></p><p><Vi sparar ditt pris förslag i 90 dagar</b></p><p></p><p><b>För att se prisförfrågan igen, besök:</b>"
+                    + "<p><b>Om du har frågor kontakta:<b> </br><a href='mailto:flytt@moveit.se'>flytt@moveit.se</a></p>"
+                    + "</div></div></div>" +
+                    "<input type ='button' id ='order-movment-btn' value = 'Beställ flytt' /></br></br>" +
+                    "<input type='button' id='close-price-offer-btn' value='Stäng' />" +
+                    "<div id='DisplayMessage'></div></form>")
+
+                var piano = $('#pianostat').text() === "true" ? "Ja" : "Nej";
+                $('#pianostat').text(piano);
+                var packing = $('#packingstat').text() === "true" ? "Ja" : "Nej";
+                $('#packingstat').text(packing);
+
+                savePriceRequestToDatabase(el);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.log('Error in Operation');
+            }
+        });
+        var offertnumber = GetLatestId();
+
+    });
+
+    function savePriceRequestToDatabase(el) {
+        $.ajax({
+            url: '/api/PriceOffer/PostPriceOffer',
+            async: true,
+            contentType: 'application/json; charset=UTF-8',
+            type: 'POST',
+            dataType: 'text',
+            data: JSON.stringify(el),
+            success: function (data, textStatus, xhr) {
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.responseText);
+            }
+        });
+    };
+    var message = $('#Message').val();
+    $('#DisplayMessage').val(message.toString()); 
+
+    $("#close-price-offer-btn").on("click", function () {
+        $("#PriceSuggestion").hide();
+        $("#fromToDestination").show();
+    });
+
+    function GetLatestId() {
+        var CurrentUser = $("#Username").val();
+        $.ajax({
+            url: '/api/PriceOffer/GetLatestPriceOffer',
+            async: false,
+            contentType: 'application/json; charset=UTF-8',
+            type: 'GET',
+            success: function (data, textStatus, xhr) {
+                console.log(data);
+                $("#latestid").html(data.Id);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.responseText);
+            }
+        });
+
+    }
+</script>
