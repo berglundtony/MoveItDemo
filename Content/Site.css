@@ -28,13 +28,24 @@ textarea {
     padding-top: 20px;
 }
 
-/*@media only screen and (max-width: 767px) {
-    .nofloat {
-        float: none;
-        padding: 10px 15px;
-    }
-}*/
+ .message {
+    display: block;
+    white-space:normal;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    overflow: hidden;
+    width: 100%;
+    color:darkred;
+    font-size: medium;
+}
 
+.price-suggestion > a {
+    font-size:large;
+}
+
+a.contact {
+    font-size: large;
+}
 /* Custom, iPhone Retina */
 @media only screen and (min-width : 320px) {
     #showMe {

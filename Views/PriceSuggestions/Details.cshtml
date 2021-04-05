@@ -1,0 +1,113 @@
+﻿@using Microsoft.AspNet.Identity;
+@model int?
+@if (Request.IsAuthenticated)
+{
+    <input type="hidden" id="Username" value="@Html.Raw(User.Identity.GetUserName())" />
+    <div id="PriceSuggestion">
+        <div class="container">
+            <div class='col-xs-12 col-sm-12 col-md-7 col-lg-7'>
+                <br>
+                <h1>Prisförslag på bohagsflytt</h1>
+                <form>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+                            <br />
+                            <p><b>Offertnummer: </b><span id="latestid">208</span></p>
+                            <p><b>Namn: </b><span id="fullname"></span></p>
+                            <p><b>Användarnamn: </b><span id="username"></span></p>
+                            <p><b>Från: </b><span id="fromaddress"></span></p>
+                            <p><b>Till: </b><span id="toaddress"></span></p>
+                            <p><b>Sträcka: </b><span id="distance"></span>km</p>
+                            <p><b>Bostadsyta: </b><span id="residencearea"> kvm</span></p>
+                            <p><b>Vind/Källare: </b><span id="windbasementarea"> kvm</span></p>
+                            <br />
+                            <h4>Övrigt</h4>
+                            <p><b>Pianoflytt: <span id="pianostat"></span></b></p>
+                            <p><b><b>Packhjälp: </b> <span id="packingstat"></span></b></p>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
+                            <br />
+                            <h3><b>Uppskattat pris:&nbsp;<span id="price"></span> kr inklusive moms.</b></h3>
+                            <h4><b>Vi sparar ditt prisförslag i 90 dagar</b></h4>
+                            <p>&nbsp;</p>
+                            <h4><b>Om du har frågor kontakta:</b></h4>
+                            <h4><a href="mailto:flytt@moveit.se">flytt@moveit.se</a></h4>
+                            <p></p>
+                            <div id='Message' data-value=" + "></div><p></p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <br><br>
+            <div class="form-group-btn">
+                <input type="button" id="order-movment-btn" onclick="Order()" value="Beställ flytt">
+            </div>
+        </div>
+    </div>
+ }
+    <script>
+    var price = $("#price").text();
+
+    GetPriceOfferById(@Model);
+    // Get current priceofferid
+    function GetPriceOfferById(id) {
+        $.ajax({
+            url: '/api/PriceOffer/GetPriceOffer?id=' + id,
+            async: false,
+            contentType: 'application/json; charset=UTF-8',
+            type: 'GET',
+            success: function (data, textStatus, xhr) {
+                var el = data;
+                $("#latestid").text(el.id);
+                $("#fullname").text(el.firstName + " " + el.lastName);
+                $("#username").text(el.userName);
+                $("#fromaddress").text(el.fromName);
+                $("#toaddress").text(el.toName);
+                $("#distance").text(el.distance);
+                $("#residencearea").text(el.residenceArea);
+                $("#windbasementarea").text(el.windBaseMentArea);
+                $("#pianostat").text(el.pianoStatus === true ? "Ja" : "Nej");
+                $("#packingstat").text(el.packingStatus === true ? "Ja" : "Nej");
+                $("#price").text(el.price);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.responseText);
+            }
+
+        });
+
+    }
+
+    // Order Movment
+    function Order()
+    {
+        var price = $("#price").text();
+        var offerid = $("#latestid").text();
+        var username = $("#Username").val();
+        var model = { 'Id': offerid, 'UserName': username }
+        if (price != 0) {
+            $.ajax({
+                cache: false,
+                url: '/api/PriceOffer/Order',
+                async: true,
+                contentType: 'application/json; charset=UTF-8',
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify(model),
+                success: function (data, textStatus, xhr) {
+                    console.log(data);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(XMLHttpRequest.responseText);
+                }
+            });
+
+
+        }
+        else {
+            var msg = $("#Message").text("Eftersom priset är 0 kr så går det inte att boka flyttningen.");
+            $("#Message").val(msg).data("value");
+        }
+
+    };
+    </script>

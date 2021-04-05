@@ -1,0 +1,84 @@
+﻿@model IEnumerable<MoveItDemo.Models.ViewModels.PriceOffers>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FromName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ToName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Distance)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ResidenceArea)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.WindBaseMentArea)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PianoStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PackingStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FromName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ToName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Distance)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ResidenceArea)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.WindBaseMentArea)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PianoStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PackingStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
+        </td>
+    </tr>
+}
+
+</table>

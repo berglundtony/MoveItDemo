@@ -5,7 +5,7 @@ using System.Web;
 
 namespace MoveItDemo.Models.ViewModels
 {
-    public class PriceSuggestion
+    public class PriceOffers
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
@@ -14,9 +14,11 @@ namespace MoveItDemo.Models.ViewModels
         public string FromName { get; set; }
         public string ToName { get; set; }
         public string Distance { get; set; }
-        public Nullable<int> ResidenceArea { get; set; }
-        public Nullable<int> WindBaseMentArea { get; set; }
-        public Nullable<bool> PianoStatus { get; set; }
-        public Nullable<bool> PackingStatus { get; set; }
+        public int? ResidenceArea { get; set; }
+        public int? WindBaseMentArea { get; set; }
+        public bool? PianoStatus { get; set; }
+        public bool? PackingStatus { get; set; }
+        public decimal? Price { get; set; }
+
     }
 }

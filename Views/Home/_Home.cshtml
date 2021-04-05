@@ -2,8 +2,8 @@
 @using MoveItDemo.Models.ViewModels;
 @if (Request.IsAuthenticated)
 {
-    <input type="hidden" id="Message" value="@Session["Message"]" />;
     <input type="hidden" id="Username" value="@Html.Raw(User.Identity.GetUserName())" />
+
     <div id="fromToDestination">
         <div class="row">
             <div class="col-sm-12 col-md-12">
@@ -92,7 +92,7 @@
                     <input type="text" class="form-control" id="toname" name="to_name" />
                 </div>
                 <div class="form-group">
-                    <label class="form-check-label" for="distancecheck">Avstånd</label>
+                    <label class="form-check-label" for="distancecheck">Avstånd i km</label>
                     <input type="text" class="form-control" id="distance" name="distance" />
                 </div>
                 <div class="form-group">
@@ -122,10 +122,17 @@
 }
 <script type="text/javascript">
     $(function () {
-        $("#view-price-suggestions-btn").show();
-        $("#check-price-form").hide();
+
+        if (window.location.href.indexOf("/#/api/PriceOffer/GetPriceOffer?id=") > -1) {
+            $("#fromToDestination").hide();
+            $("#check-price-form").hide();
+        } else {
+            $("#check-price-form").hide();
+            $("#view-price-suggestions-btn").show();
+        }
     });
 
+    // Getting form and values for pricerequest
     $("#GetFormForPriceSuggestion").on("click", function () {
         var travelfrom = $("#dvOrigin").text();
         var travelto = $("#dvDestination").text();
@@ -139,11 +146,19 @@
         $("#distance").val(distance);
     });
 
+    // Closing form by close buttom
     $("#close-btn").on("click", function () {
         $("#check-price-form").hide();
         $("#fromToDestination").show();
     });
 
+    // Closing pricerequest by close buttom
+    function closePriceSuggestion() {
+        $("#PriceSuggestion").hide();
+        $("#fromToDestination").show();
+    };
+
+    // Get price request from form
     $("#view-price-suggestions-btn").on("click", function () {
         var firstname = $("#firstname").val();
         var lastname = $("#lastname").val();
@@ -159,48 +174,66 @@
         var datastring = { 'FirstName': firstname, 'LastName': lastname, 'UserName': username, 'FromName': travelfrom, 'ToName': travelto, 'Distance': distance, 'ResidenceArea': residencearea, 'WindBaseMentArea': windbasementarea, 'PianoStatus': pianostatus, 'PackingStatus': packingstatus }
 
         $.ajax({
-            url: 'Home/GetOffert',
+            url: '/Home/GetOffer',
             type: 'GET',
             dataType: 'json',
             data: datastring,
             success: function (data, textStatus, xhr) {
                 var el = data;
+                var url = "";
                 $('#check-price-form').hide();
-                $("#PriceSuggestion").html("<div class='<div class='container'>" +
-                    "</br><h1>Prisförslag på bohagsflytt</h1><div class='row'><div class='col-xs-12 col-sm-12 col-md-6 col-lg-6'></b><p></p><p></p><p></p><p><form><b>Offertnummer: </b><span id='latestid'>"
+                $("#PriceSuggestion").html("<div class='<div class='container'>"
+                    + "</br><h1>Prisförslag på bohagsflytt</h1><form><div class='row'><div class='col-xs-12 col-sm-12 col-md-5 col-lg-5'><p></p><p></p><p></p>"
+                    +  "<p></p><p><b>Offertnummer: </b><span id='latestid'>"
                     + el.Id + "</span></p><p><b>Namn: </b>"
-                    + el.FirstName + " "
-                    + el.LastName + "</p><p><b>Användarnamn: </b>"
+                    + el.FirstName + " " + el.LastName + "</p><p><b>Användarnamn: </b>"
                     + el.UserName + "</p><p><b>Från: </b>"
                     + el.FromName + "</p><p><b>Till: </b>"
                     + el.ToName + "</p><p><b>Sträcka: </b>"
                     + el.Distance + "</p><p><b>Bostadsyta: </b>"
                     + el.ResidenceArea + " kvm</p><p><b>Vind/Källare: </b>"
-                    + el.WindBaseMentArea + " kvm</p><p></p><b>Övrigt </b><p><b>Pianoflytt: </b> <span id='pianostat'>"
-                    + el.PianoStatus + "</span></p><p><b>Packhjälp: </b> <span id='packingstat'>"
-                    + el.PackingStatus + "</span></p></div><div class='col-xs-12 col-sm-12 col-md-6 col-lg-6'><h3>Upskattat pris: "
-                    + el.Price + " kr inklusive moms.</h3></p><p></p><p><Vi sparar ditt pris förslag i 90 dagar</b></p><p></p><p><b>För att se prisförfrågan igen, besök:</b>"
-                    + "<p><b>Om du har frågor kontakta:<b> </br><a href='mailto:flytt@moveit.se'>flytt@moveit.se</a></p>"
-                    + "</div></div></div>" +
-                    "<input type ='button' id ='order-movment-btn' value = 'Beställ flytt' /></br></br>" +
-                    "<input type='button' id='close-price-offer-btn' value='Stäng' />" +
-                    "<div id='DisplayMessage'></div></form>")
-
-                var piano = $('#pianostat').text() === "true" ? "Ja" : "Nej";
-                $('#pianostat').text(piano);
-                var packing = $('#packingstat').text() === "true" ? "Ja" : "Nej";
-                $('#packingstat').text(packing);
+                    + el.WindBaseMentArea + " kvm</p><p></p><p></p><p></p><h4>Övrigt</h4><p><b>Pianoflytt:</b> <span id='pianostat'>"
+                    + (el.PianoStatus === true ? "Ja" : "Nej") + "</span></p><p><b>Packhjälp:</b> <span id='packingstat'>"
+                    + (el.PackingStatus === true ? "Ja" : "Nej") + "</span></p></div><div class='col-xs-12 col-sm-12 col-md-7 col-lg-7'><h3>Uppskattat pris är <span id='price'>"
+                    + el.Price + "</span> kr inklusive moms.</h3>"
+                    + "<h4>Vi sparar ditt prisförslag i 90 dagar</h4><br />"
+                    + "<h4>För att se prisförfrågan igen, besök:</h4><p></p>"
+                    + "<label class='price-suggestion' id='priceoffer-id' onClick='GetPriceOfferById(" + el.Id + ")'>" + url + "</label>"
+                    + "<br/><br/><h4>Om du har frågor kontakta:</h4>"
+                    + "<a class='contact' href='mailto:flytt@moveit.se'>flytt@moveit.se</a>"
+                    + "</div></div>"
+                    + "<p></p><p></p>"
+                    + "<div id='Message' class='message' data-value=" + "></div><p></p><p></p>"
+                    + "<div id='MessagePiano' class='message' data-value=" + "></div><p></p>"
+                    + "<div id='MessagePackingStatus' class='message' data-value=" + "></div><p></p>"
+                    + "<div class='form-group-btn'>"
+                    + "<input type='button' id=" + " order-movment-btn" + " onClick = 'Order()'" + " value = 'Beställ flytt' />&nbsp;&nbsp;"
+                    + "<input type='button' id='close-price-offer-btn' onClick='closePriceSuggestion()' value='Stäng' />"
+                    + "</div></form>"
+                    )
 
                 savePriceRequestToDatabase(el);
+                GetLatestId()
+                var msg = $("#Message").text("@Request.RequestContext.HttpContext.Session["Message"]");
+                $("#Message").val(msg).data("value");
+                var msgpiano = $("#MessagePiano").text("@Request.RequestContext.HttpContext.Session["MessagePiano"]");
+                $("#MessagePiano").val(msgpiano).data("value");
+                var packstat = $("#packingstat").text();
+                if (packstat != 0) {
+                    var msgpackingstatus = $("#MessagePackingStatus").text("@Request.RequestContext.HttpContext.Session["MessagePackingStatus"]");
+                    $("#MessagePackingStatus").val(msgpackingstatus).data("value");
+                } else {
+                     var msgpackingstatus = $("#MessagePackingStatus").text("@Request.RequestContext.HttpContext.Session["MessagePackingStatus"]");
+                    $("#MessagePackingStatus").hide();
+                }
+
             },
             error: function (xhr, textStatus, errorThrown) {
-                console.log('Error in Operation');
+                console.log('Error in Operation')
             }
         });
-        var offertnumber = GetLatestId();
-
     });
-
+    // Save pricerequest
     function savePriceRequestToDatabase(el) {
         $.ajax({
             url: '/api/PriceOffer/PostPriceOffer',
@@ -217,29 +250,66 @@
             }
         });
     };
-    var message = $('#Message').val();
-    $('#DisplayMessage').val(message.toString()); 
 
-    $("#close-price-offer-btn").on("click", function () {
-        $("#PriceSuggestion").hide();
-        $("#fromToDestination").show();
-    });
-
-    function GetLatestId() {
-        var CurrentUser = $("#Username").val();
+    // Get current priceofferid
+    function GetPriceOfferById(id) {
         $.ajax({
-            url: '/api/PriceOffer/GetLatestPriceOffer',
+            url: '/api/PriceOffer/GetPriceOffer?id='+ id,
             async: false,
             contentType: 'application/json; charset=UTF-8',
             type: 'GET',
             success: function (data, textStatus, xhr) {
-                console.log(data);
-                $("#latestid").html(data.Id);
+                $("#latestid").text(data);
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 console.log(XMLHttpRequest.responseText);
             }
         });
-
     }
+
+    //Get current id for price requests by current username
+    function GetLatestId() {
+        $.ajax({
+            url: 'home/GetLatestPriceOffer',
+            async: false,
+            contentType: 'application/json; charset=UTF-8',
+            type: 'GET',
+            success: function (data, textStatus, xhr) {
+                $("#latestid").text(data);
+                $("#priceoffer-id").attr("onclick", "GetPriceOfferById(" + data + ")");
+                $("#priceoffer-id").append("<a target='_blank' href=" + location.origin + "/PriceSuggestions/Details/" + data + ">" + location.origin + "/PriceSuggestions/Details/" + data + "</a>");
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest.responseText);
+            }
+        });
+    }
+
+    // Order Movment
+     function Order(){
+        var offerid = $("#latestid").text();
+         var username = $("#Username").val();
+         var model = { 'Id': offerid, 'UserName': username }
+         var price = $("#price").text();
+         if (price != 0) {
+             $.ajax({
+                 cache: false,
+                 url: '/api/PriceOffer/Order',
+                 async: true,
+                 contentType: 'application/json; charset=UTF-8',
+                 type: 'POST',
+                 dataType: 'json',
+                 data: JSON.stringify(model),
+                 success: function (data, textStatus, xhr) {
+                     console.log(data);
+                 },
+                 error: function (XMLHttpRequest, textStatus, errorThrown) {
+                     console.log(XMLHttpRequest.responseText);
+                 }
+             });
+         } else {
+             var msg = $("#Message").text("Eftersom priset är 0 kr så går det inte att boka flyttningen.");
+             $("#Message").val(msg).data("value");
+         }
+    };
 </script>

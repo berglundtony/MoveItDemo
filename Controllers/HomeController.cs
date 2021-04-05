@@ -1,7 +1,7 @@
-﻿using MoveItDemo.Functions;
+﻿using Microsoft.AspNet.Identity;
+using MoveItDemo.Functions;
 using MoveItDemo.Models;
 using MoveItDemo.Models.ViewModels;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +13,17 @@ namespace MoveItDemo.Controllers
 {
     public class HomeController : Controller
     {
+        public UserManager<ApplicationUser> UserManager { get; }
+        /// <summary>
+        /// Application DB context
+        /// </summary>
+        protected ApplicationDbContext ApplicationDbContext { get; set; }
+
+        /// <summary>
+        /// User manager - attached to application DB context
+        /// </summary>
+        private DataHandlerEntities db = new DataHandlerEntities();
+
         [System.Web.Http.Authorize]
         public ActionResult Index()
         {
@@ -24,7 +35,7 @@ namespace MoveItDemo.Controllers
         /// <param name="pricesuggestion"></param>
         /// <returns></returns>
         [System.Web.Http.HttpGet]
-        public JsonResult GetOffert([FromBody] PriceSuggestion pricesuggestion)
+        public JsonResult GetOffer([FromBody] PriceSuggestion pricesuggestion)
         {
             try
             {
@@ -51,6 +62,22 @@ namespace MoveItDemo.Controllers
                 return null;
             }
 
+        }
+        [System.Web.Http.HttpGet]
+        [System.Web.Http.Authorize]
+        public JsonResult GetLatestPriceOffer()
+        {
+            //ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+            var CurrentUser = User.Identity.GetUserName();
+            try
+            {
+                int latestid = db.PriceOfferts.Where(l => l.UserName == CurrentUser).Max(i => i.Id);
+                return Json(latestid, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { status = "error", message = "No price offer yet for this customer" });
+            }  
         }
 
         /// <summary>

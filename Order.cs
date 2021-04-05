@@ -16,7 +16,7 @@ namespace MoveItDemo
     {
         public int Id { get; set; }
         public Nullable<int> OffertId { get; set; }
-        public Nullable<int> UsernName { get; set; }
+        public string UsernName { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
     }
 }

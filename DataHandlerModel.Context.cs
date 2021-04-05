@@ -13,10 +13,10 @@ namespace MoveItDemo
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class DefaultConnectionEntities : DbContext
+    public partial class DataHandlerEntities : DbContext
     {
-        public DefaultConnectionEntities()
-            : base("name=DefaultConnectionEntities")
+        public DataHandlerEntities()
+            : base("name=DataHandlerEntities")
         {
         }
     
@@ -25,10 +25,11 @@ namespace MoveItDemo
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
-        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
-        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
-        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
-        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<PriceOffert> PriceOfferts { get; set; }
+
+        public System.Data.Entity.DbSet<MoveItDemo.Models.ViewModels.PriceSuggestion> PriceSuggestions { get; set; }
+
+        public System.Data.Entity.DbSet<MoveItDemo.Models.ViewModels.PriceOffers> PriceOffers { get; set; }
     }
 }

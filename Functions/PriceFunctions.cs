@@ -1,6 +1,7 @@
 ﻿using MoveItDemo.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Remoting.Contexts;
@@ -15,19 +16,25 @@ namespace MoveItDemo.Functions
     public static class PriceFunctions
     {
         private static string message = "";
-        
+        private static string msgpiano = "";
+        private static string msgpackingstatus = "";
+
         public static decimal?  GetPrice(string distance, int? residencearea, int? windbasementarea, bool? pianoStatus, bool? packingstatus)
         {
-            
-            int dist = 0;
-            decimal result = 0m;
-            decimal? price = 0m;
-            decimal todecimal = 0m;
 
-            todecimal = ReplaceKilometerFromDistance(distance);
-     
-            result = Math.Round(todecimal, 0);
-            dist = Convert.ToInt32(result);
+            message = "";
+            Message(message);
+
+            msgpiano = "";
+            MessagePiano(msgpiano);
+
+            msgpackingstatus = "";
+            MessagePackingStatus(msgpackingstatus);
+
+            decimal todecimal = ReplaceKilometerFromDistance(distance);
+            decimal? price;
+            decimal result = Math.Round(todecimal, 0);
+            int dist = Convert.ToInt32(result);
 
             if (dist < 50)
             {
@@ -46,13 +53,28 @@ namespace MoveItDemo.Functions
 
             if (pianoStatus == true)
             {
-                price += 5000;
+                if(price > 0)
+                {
+                    price += 5000;
+
+                    msgpiano = "";
+                    MessagePiano(msgpiano);
+
+                }
+                else
+                {
+                    price = 0;
+                    msgpiano = "Your other requests are not confirmed, so you have to make a new try to move the piano.";
+  
+                    MessagePiano(msgpiano);
+                }
+      
             }
             if (packingstatus == true)
             {
-                message = "Har ingen uppgift på vad detta skulle kosta med packning, antar att det beror på antal timmar och hur stor yta det gäller.";
+                msgpackingstatus = "Have no information of what this will cost with packing, please contact MoveIt for information.";
                 //price += 2000;
-                Message(message);
+                MessagePackingStatus(msgpackingstatus);
             }
             return price;
         }
@@ -121,18 +143,17 @@ namespace MoveItDemo.Functions
                 car = 9;
                 price = car * price;
             }
-            else if (area >= 450 && area < 500)
+            else if (area >= 450 && area < 501)
             {
                 car = 10;
                 price = car * price;
             }
             else
             {
-                message = "vi har inte så många bilar så du får göra en till beställning en annan dag";
+                message = "The limit for the basementarea is 500 kvm.";
+                Message(message);
+                price = 0;
             }
-
-            Message(message);
-
             return price;
         }
 
@@ -140,6 +161,18 @@ namespace MoveItDemo.Functions
         {
             HttpContext.Current.Session["Message"] = message;
             return message;
+        }
+
+        internal static string MessagePiano(string msgpiano)
+        {
+            HttpContext.Current.Session["MessagePiano"] = msgpiano;
+            return msgpiano;
+        }
+
+        internal static string MessagePackingStatus(string msgpackingstatus)
+        {
+            HttpContext.Current.Session["MessagePackingStatus"] = msgpackingstatus;
+            return msgpackingstatus;
         }
 
         private static int? CalculateWindBasementArea(int? windbasementarea)
