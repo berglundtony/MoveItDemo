@@ -72,7 +72,7 @@ namespace MoveItDemo.Functions
             }
             if (packingstatus == true)
             {
-                msgpackingstatus = "Have no information of what this will cost with packing, please contact MoveIt for information.";
+                msgpackingstatus = "About packing help, we have no information of what this will cost, please contact MoveIt for information.";
                 //price += 2000;
                 MessagePackingStatus(msgpackingstatus);
             }

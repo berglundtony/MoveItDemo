@@ -579,12 +579,27 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="AspNetRole.cs">
+      <DependentUpon>DefaultDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUser.cs">
+      <DependentUpon>DefaultDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUserClaim.cs">
+      <DependentUpon>DefaultDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUserLogin.cs">
+      <DependentUpon>DefaultDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MeController.cs" />
     <Compile Include="Controllers\PriceOfferController.cs" />
     <Compile Include="Controllers\PriceSuggestionsController.cs" />
+    <Compile Include="C__MigrationHistory.cs">
+      <DependentUpon>DefaultDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataHandlerModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -599,6 +614,21 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataHandlerModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DefaultDataModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DefaultDataModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DefaultDataModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DefaultDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DefaultDataModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DefaultDataModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Functions\MapFunctions.cs" />
     <Compile Include="Functions\PriceFunctions.cs" />
@@ -645,6 +675,16 @@
       <DependentUpon>DataHandlerModel.edmx</DependentUpon>
       <LastGenOutput>DataHandlerModel.cs</LastGenOutput>
     </Content>
+    <Content Include="DefaultDataModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DefaultDataModel.edmx</DependentUpon>
+      <LastGenOutput>DefaultDataModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="DefaultDataModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DefaultDataModel.edmx</DependentUpon>
+      <LastGenOutput>DefaultDataModel.cs</LastGenOutput>
+    </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -674,6 +714,13 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <EntityDeploy Include="DefaultDataModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DefaultDataModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="DefaultDataModel.edmx.diagram">
+      <DependentUpon>DefaultDataModel.edmx</DependentUpon>
+    </Content>
     <EntityDeploy Include="DataHandlerModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DataHandlerModel.Designer.cs</LastGenOutput>
@@ -686,6 +733,9 @@
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\knockout-3.5.0.debug.js" />
     <Content Include="Scripts\knockout-3.5.0.js" />
     <Content Include="Scripts\knockout.validation.js" />

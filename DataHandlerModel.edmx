@@ -11,7 +11,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OffertId" Type="int" />
-          <Property Name="UsernName" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" />
           <Property Name="Date" Type="datetime2" Precision="7" />
         </EntityType>
         <EntityType Name="PriceOffert">
@@ -46,7 +46,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="OffertId" Type="Int32" />
-          <Property Name="UsernName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="DateTime" Precision="7" />
         </EntityType>
         <EntityType Name="PriceOffert">
@@ -81,7 +81,7 @@
               <MappingFragment StoreEntitySet="Order">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="OffertId" ColumnName="OffertId" />
-                <ScalarProperty Name="UsernName" ColumnName="UsernName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -12,11 +12,13 @@ namespace MoveItDemo
     using System;
     using System.Collections.Generic;
     
-    public partial class Order
+    public partial class AspNetUserClaim
     {
         public int Id { get; set; }
-        public Nullable<int> OffertId { get; set; }
-        public string UserName { get; set; }
-        public Nullable<System.DateTime> Date { get; set; }
+        public string UserId { get; set; }
+        public string ClaimType { get; set; }
+        public string ClaimValue { get; set; }
+    
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

@@ -16,7 +16,8 @@ namespace MoveItDemo.Controllers
     public class PriceSuggestionsController : Controller
     {
         private static DataHandlerEntities db = new DataHandlerEntities();
-        private static DefaultConnectionEntities default_db = new DefaultConnectionEntities();
+        private static DefaultDataEntities defaultdb = new DefaultDataEntities();
+
 
         // GET: PriceSuggestions
         [Authorize]

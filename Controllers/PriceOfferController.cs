@@ -51,12 +51,11 @@ namespace MoveItDemo.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var order = new OrderMove();
             var orderm= new Order 
             { 
                 Date = DateTime.Now,
-                OffertId = order.Id,
-                UsernName = order.UserName
+                OffertId = ordermove.Id,
+                UserName = ordermove.UserName
             };
             db.Orders.Add(orderm);
             await db.SaveChangesAsync();
