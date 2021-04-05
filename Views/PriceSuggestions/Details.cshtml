@@ -44,6 +44,7 @@
             </div>
         </div>
     </div>
+    <div id="OrderConfirmation"></div>
  }
     <script>
     var price = $("#price").text();
@@ -93,7 +94,19 @@
                 dataType: 'json',
                 data: JSON.stringify(model),
                 success: function (data, textStatus, xhr) {
-                    console.log(data);
+                    var el = data;
+                    $("#PriceSuggestion").hide();
+                    $("#OrderConfirmation").html("<div class='container'>"
+                        + "<div class='row'><div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'><br/><h1>Bokningsbekräftelse</h1>"
+                        + "<br/><p><h4>Hej " + el.userName + " vi har tagit emot din bokning och ser fram emot att hjälpa dig med flytten.</h5>"
+                        + "<br/><p><b>Bokningsnummer: </b>" + el.id
+                        + "<p><b>Offert id: </b>" + el.offertId + "</p><br/>"
+                        + "<p><h4><b>Vi kommer att kontakta dig i god tid innan inbokat datum för närmare beskrivning.</b></h4></p>"
+                        + "<br/><p><H4>Tack för att du valt att ta hjälp utav oss för att underlätta din flytt!</h4></p>"
+                        + "<input type='button' id='close-booking-confirmation-btn' onClick='closeBookingConfirmation()' value='Stäng' />"
+                        + "</div></div></div>"
+                    )
+                    console.log(el);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log(XMLHttpRequest.responseText);
@@ -104,6 +117,5 @@
             var msg = $("#Message").text("Eftersom priset är 0 kr så går det inte att boka flyttningen.");
             $("#Message").val(msg).data("value");
         }
-
     };
     </script>

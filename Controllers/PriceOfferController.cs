@@ -11,7 +11,7 @@ namespace MoveItDemo.Controllers
 {
     public class PriceOfferController : ApiController
     {
-        private DataHandlerEntities db = new DataHandlerEntities();
+        private DataHandlingEntities db = new DataHandlingEntities();
 
         // GET: api/GetPriceOffer?id=5
         [ResponseType(typeof(PriceOffert))]

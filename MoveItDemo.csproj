@@ -742,6 +742,7 @@
     <Content Include="Scripts\knockout.validation.min.js" />
     <Content Include="Scripts\MapScript.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\PriceOffersAndOrderScript.js" />
     <Content Include="Scripts\sammy-0.7.5.js" />
     <Content Include="Scripts\sammy-0.7.5.min.js" />
     <Content Include="Views\_ViewStart.cshtml" />

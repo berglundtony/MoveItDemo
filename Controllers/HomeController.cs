@@ -22,7 +22,7 @@ namespace MoveItDemo.Controllers
         /// <summary>
         /// User manager - attached to application DB context
         /// </summary>
-        private DataHandlerEntities db = new DataHandlerEntities();
+        private DataHandlingEntities db = new DataHandlingEntities();
 
         [System.Web.Http.Authorize]
         public ActionResult Index()

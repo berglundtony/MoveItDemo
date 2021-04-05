@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DataHandlerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="DataHandlingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Order">
           <Key>
             <PropertyRef Name="Id" />
@@ -31,7 +31,7 @@
           <Property Name="PackingStatus" Type="bit" />
           <Property Name="Price" Type="money" />
         </EntityType>
-        <EntityContainer Name="DataHandlerModelStoreContainer">
+        <EntityContainer Name="DataHandlingModelStoreContainer">
           <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PriceOffert" EntityType="Self.PriceOffert" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
@@ -39,7 +39,7 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="DataHandlerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="DataHandlingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Order">
           <Key>
             <PropertyRef Name="Id" />
@@ -66,7 +66,7 @@
           <Property Name="PackingStatus" Type="Boolean" />
           <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
         </EntityType>
-        <EntityContainer Name="DataHandlerEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="DataHandlingEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Orders" EntityType="Self.Order" />
           <EntitySet Name="PriceOfferts" EntityType="Self.PriceOffert" />
         </EntityContainer>
@@ -75,9 +75,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="DataHandlerModelStoreContainer" CdmEntityContainer="DataHandlerEntities">
+        <EntityContainerMapping StorageEntityContainer="DataHandlingModelStoreContainer" CdmEntityContainer="DataHandlingEntities">
           <EntitySetMapping Name="Orders">
-            <EntityTypeMapping TypeName="DataHandlerModel.Order">
+            <EntityTypeMapping TypeName="DataHandlingModel.Order">
               <MappingFragment StoreEntitySet="Order">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="OffertId" ColumnName="OffertId" />
@@ -87,7 +87,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PriceOfferts">
-            <EntityTypeMapping TypeName="DataHandlerModel.PriceOffert">
+            <EntityTypeMapping TypeName="DataHandlingModel.PriceOffert">
               <MappingFragment StoreEntitySet="PriceOffert">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />

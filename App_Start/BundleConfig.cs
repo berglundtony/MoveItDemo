@@ -22,7 +22,8 @@ namespace MoveItDemo
                 "~/Scripts/knockout.validation.js"));
             bundles.Add(new ScriptBundle("~/bundles/mapscript").Include(
               "~/Scripts/MapScript.js"));
-            
+            bundles.Add(new ScriptBundle("~/bundles/priceoffersandorderscript").Include(
+              "~/Scripts/PriceOffersAndOrderScript.js"));
             bundles.Add(new ScriptBundle("~/bundles/app").Include(
                 "~/Scripts/sammy-{version}.js",
                 "~/Scripts/app/common.js",

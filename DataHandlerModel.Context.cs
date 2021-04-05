@@ -13,10 +13,10 @@ namespace MoveItDemo
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class DataHandlerEntities : DbContext
+    public partial class DataHandlingEntities : DbContext
     {
-        public DataHandlerEntities()
-            : base("name=DataHandlerEntities")
+        public DataHandlingEntities()
+            : base("name=DataHandlingEntities")
         {
         }
     

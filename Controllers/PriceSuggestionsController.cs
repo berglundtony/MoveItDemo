@@ -10,12 +10,13 @@ using System.Web.Mvc;
 using MoveItDemo;
 using MoveItDemo.Models.ViewModels;
 using Microsoft.AspNet.Identity;
+using MoveItDemo.Models;
 
 namespace MoveItDemo.Controllers
 {
     public class PriceSuggestionsController : Controller
     {
-        private static DataHandlerEntities db = new DataHandlerEntities();
+        private static DataHandlingEntities db = new DataHandlingEntities();
         private static DefaultDataEntities defaultdb = new DefaultDataEntities();
 
 
@@ -23,30 +24,41 @@ namespace MoveItDemo.Controllers
         [Authorize]
         public ActionResult PriceOffers()
         {
-            var CurrentUser = User.Identity.GetUserName();
-            IQueryable<PriceOffert> _po = db.PriceOfferts.Where(l => l.UserName == CurrentUser);
-
-            var _priceoffers = new List<PriceOffers>();
-            foreach (var i in _po)
+            try
             {
-                _priceoffers.Add(
-                new PriceOffers
+                var CurrentUser = User.Identity.GetUserName();
+                IQueryable<PriceOffert> _po = db.PriceOfferts.Where(l => l.UserName == CurrentUser);
+                var _priceoffers = new List<PriceOffers>();
+             
+                foreach (var i in _po)
                 {
-                    Id = i.Id,
-                    FirstName = i.FirstName,
-                    LastName = i.LastName,
-                    UserName = i.UserName,
-                    FromName = i.FromName,
-                    ToName = i.ToName,
-                    Distance = i.Distance,
-                    ResidenceArea = i.ResidenceArea,
-                    WindBaseMentArea = i.WindBaseMentArea,
-                    PianoStatus = i.PianoStatus,
-                    PackingStatus = i.PackingStatus,
-                    Price = i.Price
-                }); ;
+                    _priceoffers.Add(
+                    new PriceOffers
+                    {
+                        Id = i.Id,
+                        FirstName = i.FirstName,
+                        LastName = i.LastName,
+                        UserName = i.UserName,
+                        FromName = i.FromName,
+                        ToName = i.ToName,
+                        Distance = i.Distance,
+                        ResidenceArea = i.ResidenceArea,
+                        WindBaseMentArea = i.WindBaseMentArea,
+                        PianoStatus = i.PianoStatus,
+                        PackingStatus = i.PackingStatus,
+                        Price = i.Price
+                    }); ;
+                }
+                return View(_priceoffers);
             }
-            return View(_priceoffers);
+            catch(Exception ex)
+            {
+                var exception = ex.Message;
+                return View();
+            }
+          
+    
+          
         }
         [Authorize]
         // GET: PriceSuggestions/Details/5
