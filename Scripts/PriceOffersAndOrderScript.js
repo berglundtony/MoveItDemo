@@ -24,7 +24,7 @@ function savePriceRequestToDatabase(el) {
         async: true,
         contentType: 'application/json; charset=UTF-8',
         type: 'POST',
-        dataType: 'text',
+        dataType: 'json',
         data: JSON.stringify(el),
         success: function (data, textStatus, xhr) {
             console.log(data);

@@ -27,29 +27,33 @@ namespace MoveItDemo.Controllers
             try
             {
                 var CurrentUser = User.Identity.GetUserName();
-                IQueryable<PriceOffert> _po = db.PriceOfferts.Where(l => l.UserName == CurrentUser);
-                var _priceoffers = new List<PriceOffers>();
-             
-                foreach (var i in _po)
+                using (var dbContext = new DataHandlingEntities())
                 {
-                    _priceoffers.Add(
-                    new PriceOffers
+                    IQueryable<PriceOffert> _po = dbContext.PriceOfferts.Where(l => l.UserName == CurrentUser);
+                var _priceoffers = new List<PriceOffers>();
+
+                    foreach (var i in _po)
                     {
-                        Id = i.Id,
-                        FirstName = i.FirstName,
-                        LastName = i.LastName,
-                        UserName = i.UserName,
-                        FromName = i.FromName,
-                        ToName = i.ToName,
-                        Distance = i.Distance,
-                        ResidenceArea = i.ResidenceArea,
-                        WindBaseMentArea = i.WindBaseMentArea,
-                        PianoStatus = i.PianoStatus,
-                        PackingStatus = i.PackingStatus,
-                        Price = i.Price
-                    }); ;
+                        _priceoffers.Add(
+                        new PriceOffers
+                        {
+                            Id = i.Id,
+                            FirstName = i.FirstName,
+                            LastName = i.LastName,
+                            UserName = i.UserName,
+                            FromName = i.FromName,
+                            ToName = i.ToName,
+                            Distance = i.Distance,
+                            ResidenceArea = i.ResidenceArea,
+                            WindBaseMentArea = i.WindBaseMentArea,
+                            PianoStatus = i.PianoStatus,
+                            PackingStatus = i.PackingStatus,
+                            Price = i.Price
+                        });
+                    }
+                    return View(_priceoffers);
                 }
-                return View(_priceoffers);
+                
             }
             catch(Exception ex)
             {
